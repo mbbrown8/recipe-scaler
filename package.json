@@ -1,0 +1,19 @@
+{
+  "name": "recipe-scaler",
+  "version": "0.1.0",
+  "description": "Scale recipe ingredient quantities and format them as kitchen-friendly fractions.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/*.test.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
