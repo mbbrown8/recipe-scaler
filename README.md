@@ -61,8 +61,26 @@ formatQuantity(0.6, [1]) // "1"
 - `scaleRecipe(recipe, toServings)` - scales every ingredient in a recipe using its current `servings`.
 - `decimalToFraction(value, denominators?)` - converts a decimal to the closest `{ whole, numerator, denominator }`.
 - `formatQuantity(quantity, denominators?)` / `formatFraction(fraction)` - render a quantity or fraction as a string.
+- `convertUnit(quantity, fromUnit, toUnit, options?)` - converts between volume units (tsp, tbsp, floz, cup, pint, quart, gallon, ml, l) or between weight units (g, kg, oz, lb).
+- `unitCategory(unit)` - returns `'volume'` or `'weight'` for a recognized unit, or `undefined`.
+
+Converting within a category is exact and needs nothing extra:
+
+```ts
+convertUnit(1.5, 'cup', 'tbsp') // 24
+convertUnit(500, 'g', 'lb')     // 1.1023...
+```
+
+Converting between volume and weight depends on the ingredient (a cup of
+flour and a cup of water don't weigh the same), so it takes an explicit
+density in grams per milliliter:
+
+```ts
+convertUnit(1, 'cup', 'g', { densityGramsPerMl: 0.53 }) // ~125g of flour
+convertUnit(1, 'cup', 'g') // throws - no density given
+```
 
 ## Status
 
-Early skeleton. Scaling and fraction formatting work; unit conversion (cups
-to tablespoons, grams to ounces) doesn't exist yet.
+Scaling, fraction formatting, and unit conversion work. Parsing ingredients
+out of free-text recipe lines doesn't exist yet.
