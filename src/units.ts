@@ -63,7 +63,8 @@ const ALIASES: Record<string, string> = {
   lbs: 'lb',
 }
 
-function normalizeUnit(unit: string): string {
+/** Maps a spelling variant (plural, alias, mixed case) to its canonical unit key. */
+export function normalizeUnit(unit: string): string {
   const key = unit.trim().toLowerCase()
   return ALIASES[key] ?? key
 }

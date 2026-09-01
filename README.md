@@ -63,6 +63,8 @@ formatQuantity(0.6, [1]) // "1"
 - `formatQuantity(quantity, denominators?)` / `formatFraction(fraction)` - render a quantity or fraction as a string.
 - `convertUnit(quantity, fromUnit, toUnit, options?)` - converts between volume units (tsp, tbsp, floz, cup, pint, quart, gallon, ml, l) or between weight units (g, kg, oz, lb).
 - `unitCategory(unit)` - returns `'volume'` or `'weight'` for a recognized unit, or `undefined`.
+- `normalizeUnit(unit)` - maps a spelling variant ("tablespoons", "Tbsp") to its canonical key ("tbsp").
+- `parseIngredientLine(line)` - parses one free-text recipe line into an `Ingredient`.
 
 Converting within a category is exact and needs nothing extra:
 
@@ -80,7 +82,26 @@ convertUnit(1, 'cup', 'g', { densityGramsPerMl: 0.53 }) // ~125g of flour
 convertUnit(1, 'cup', 'g') // throws - no density given
 ```
 
+Parsing turns a recipe line into the same shape `scaleIngredient` expects:
+
+```ts
+import { parseIngredientLine } from './src/index.js'
+
+parseIngredientLine('1 1/2 cups flour')
+// { name: 'flour', quantity: 1.5, unit: 'cup' }
+
+parseIngredientLine('3 eggs')
+// { name: 'eggs', quantity: 3, unit: 'whole' }
+```
+
+It accepts whole numbers, decimals, ASCII fractions ("1/2", "1 1/2"), and
+unicode vulgar fractions ("½", "1 ½"). A quantity with no recognized unit
+word falls back to `'whole'` instead of failing, since "3 eggs" is at least
+as common as a measured ingredient.
+
 ## Status
 
-Scaling, fraction formatting, and unit conversion work. Parsing ingredients
-out of free-text recipe lines doesn't exist yet.
+Scaling, fraction formatting, unit conversion, and free-text ingredient
+parsing work. Rounding-edge-case coverage for fraction formatting, scaling
+by a target ingredient amount instead of servings, and pluralizing scaled
+ingredient names don't exist yet.

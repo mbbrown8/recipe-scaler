@@ -3,4 +3,5 @@ export { scaleQuantity, scaleIngredient, scaleRecipe, formatQuantity } from './s
 export type { Fraction } from './fractions.js'
 export { decimalToFraction, formatFraction } from './fractions.js'
 export type { UnitCategory, ConvertUnitOptions } from './units.js'
-export { unitCategory, convertUnit } from './units.js'
+export { unitCategory, convertUnit, normalizeUnit } from './units.js'
+export { parseIngredientLine } from './parse.js'
