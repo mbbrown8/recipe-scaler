@@ -102,6 +102,6 @@ as common as a measured ingredient.
 ## Status
 
 Scaling, fraction formatting, unit conversion, and free-text ingredient
-parsing work. Rounding-edge-case coverage for fraction formatting, scaling
-by a target ingredient amount instead of servings, and pluralizing scaled
-ingredient names don't exist yet.
+parsing work, with rounding-edge-case tests for fraction formatting.
+Scaling by a target ingredient amount instead of servings, and pluralizing
+scaled ingredient names, don't exist yet.
