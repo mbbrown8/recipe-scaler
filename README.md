@@ -42,6 +42,17 @@ for (const ingredient of forTen.ingredients) {
 // 2 1/2 whole egg
 ```
 
+If you're working backward from what you have on hand rather than a serving
+count - "I've only got 3 eggs, how much of everything else do I need?" - use
+`scaleRecipeToIngredientAmount` instead:
+
+```ts
+import { scaleRecipeToIngredientAmount } from './src/index.js'
+
+const forThreeEggs = scaleRecipeToIngredientAmount(pancakes, 'egg', 3)
+// same scaling as scaleRecipe, but the ratio comes from the egg count
+```
+
 `scaleRecipe` and `scaleIngredient` return new objects; `formatQuantity` turns
 a scaled decimal (like `3.125`) into the fraction a person would actually
 measure out (`"3 1/8"`), rounding to the nearest eighth, sixth, quarter,
@@ -59,6 +70,7 @@ formatQuantity(0.6, [1]) // "1"
 - `scaleQuantity(quantity, fromServings, toServings)` - scales a single number by the servings ratio.
 - `scaleIngredient(ingredient, fromServings, toServings)` - scales one ingredient's quantity.
 - `scaleRecipe(recipe, toServings)` - scales every ingredient in a recipe using its current `servings`.
+- `scaleRecipeToIngredientAmount(recipe, ingredientName, targetQuantity)` - scales a recipe so a named ingredient ends up at `targetQuantity`, deriving the ratio from that ingredient instead of a serving count.
 - `decimalToFraction(value, denominators?)` - converts a decimal to the closest `{ whole, numerator, denominator }`.
 - `formatQuantity(quantity, denominators?)` / `formatFraction(fraction)` - render a quantity or fraction as a string.
 - `convertUnit(quantity, fromUnit, toUnit, options?)` - converts between volume units (tsp, tbsp, floz, cup, pint, quart, gallon, ml, l) or between weight units (g, kg, oz, lb).
@@ -101,7 +113,7 @@ as common as a measured ingredient.
 
 ## Status
 
-Scaling, fraction formatting, unit conversion, and free-text ingredient
-parsing work, with rounding-edge-case tests for fraction formatting.
-Scaling by a target ingredient amount instead of servings, and pluralizing
-scaled ingredient names, don't exist yet.
+Scaling (by servings or by a target ingredient amount), fraction formatting,
+unit conversion, and free-text ingredient parsing work, with rounding-edge-case
+tests for fraction formatting. Pluralizing scaled ingredient names doesn't
+exist yet.
