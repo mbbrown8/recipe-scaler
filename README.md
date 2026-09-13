@@ -39,8 +39,13 @@ for (const ingredient of forTen.ingredients) {
 // 3 3/4 cup flour
 // 5 tbsp sugar
 // 3 1/8 cup milk
-// 2 1/2 whole egg
+// 2 1/2 whole eggs
 ```
+
+Ingredient names measured with the `'whole'` unit get pluralized as part of
+scaling ("egg" becomes "eggs" once the count isn't 1); ingredients measured
+in cups, tablespoons, and the like keep their name as-is, since "2 cups
+flours" isn't something anyone writes.
 
 If you're working backward from what you have on hand rather than a serving
 count - "I've only got 3 eggs, how much of everything else do I need?" - use
@@ -77,6 +82,7 @@ formatQuantity(0.6, [1]) // "1"
 - `unitCategory(unit)` - returns `'volume'` or `'weight'` for a recognized unit, or `undefined`.
 - `normalizeUnit(unit)` - maps a spelling variant ("tablespoons", "Tbsp") to its canonical key ("tbsp").
 - `parseIngredientLine(line)` - parses one free-text recipe line into an `Ingredient`.
+- `pluralize(name)` - pluralizes an ingredient name ("egg" -> "eggs", "tomato" -> "tomatoes", "green onion" -> "green onions").
 
 Converting within a category is exact and needs nothing extra:
 
@@ -114,6 +120,6 @@ as common as a measured ingredient.
 ## Status
 
 Scaling (by servings or by a target ingredient amount), fraction formatting,
-unit conversion, and free-text ingredient parsing work, with rounding-edge-case
-tests for fraction formatting. Pluralizing scaled ingredient names doesn't
-exist yet.
+unit conversion, free-text ingredient parsing, and pluralizing scaled
+ingredient names all work, with rounding-edge-case tests for fraction
+formatting.

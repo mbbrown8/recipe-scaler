@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { scaleQuantity, scaleRecipe, scaleRecipeToIngredientAmount } from './scale.js'
+import { scaleIngredient, scaleQuantity, scaleRecipe, scaleRecipeToIngredientAmount } from './scale.js'
 import type { Recipe } from './scale.js'
 
 test('scaleQuantity applies the toServings/fromServings ratio', () => {
@@ -52,6 +52,23 @@ test('scaleRecipeToIngredientAmount throws for an unknown ingredient name', () =
 test('scaleRecipeToIngredientAmount throws for a negative or non-finite target', () => {
   assert.throws(() => scaleRecipeToIngredientAmount(pancakes, 'egg', -1), RangeError)
   assert.throws(() => scaleRecipeToIngredientAmount(pancakes, 'egg', NaN), RangeError)
+})
+
+test('scaleIngredient pluralizes a whole-unit name when the count is not 1', () => {
+  const egg = { name: 'egg', quantity: 1, unit: 'whole' }
+  assert.equal(scaleIngredient(egg, 4, 4).name, 'egg')
+  assert.equal(scaleIngredient(egg, 4, 12).name, 'eggs')
+  assert.equal(scaleIngredient(egg, 4, 2).name, 'eggs')
+})
+
+test('scaleIngredient leaves measured-unit names alone regardless of count', () => {
+  const flour = { name: 'flour', quantity: 1.5, unit: 'cup' }
+  assert.equal(scaleIngredient(flour, 4, 20).name, 'flour')
+})
+
+test('scaleRecipe pluralizes whole-unit ingredient names as it scales', () => {
+  const scaled = scaleRecipe(pancakes, 10)
+  assert.equal(scaled.ingredients[2]!.name, 'Eggs')
 })
 
 test('scaleRecipeToIngredientAmount throws when scaling from a zero quantity', () => {

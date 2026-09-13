@@ -1,4 +1,5 @@
 import { decimalToFraction, formatFraction } from './fractions.js'
+import { pluralize } from './pluralize.js'
 
 export interface Ingredient {
   name: string
@@ -32,10 +33,24 @@ export function scaleIngredient(
   fromServings: number,
   toServings: number,
 ): Ingredient {
+  const quantity = scaleQuantity(ingredient.quantity, fromServings, toServings)
   return {
     ...ingredient,
-    quantity: scaleQuantity(ingredient.quantity, fromServings, toServings),
+    quantity,
+    name: pluralizedName(ingredient.name, ingredient.unit, quantity),
   }
+}
+
+/**
+ * Pluralizes the name only for the 'whole' unit, where the name is the thing
+ * being counted ("egg" -> "eggs" at 3). Measured units keep their noun as-is
+ * regardless of count, since "2 cups flours" isn't something anyone writes.
+ */
+function pluralizedName(name: string, unit: string, quantity: number): string {
+  if (unit !== 'whole' || Math.abs(quantity - 1) < 1e-9) {
+    return name
+  }
+  return pluralize(name)
 }
 
 /**
